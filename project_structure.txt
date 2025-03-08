@@ -1,0 +1,980 @@
+=== 目录结构 ===
+Ares/
+    ai必须执行本文件内要求.txt
+    Ares.iml
+    project_structure.txt
+    scan.py
+    记录.txt
+    项目规划.drawio
+    .idea/
+        .gitignore
+        compiler.xml
+        encodings.xml
+        jarRepositories.xml
+        MarsCodeWorkspaceAppSettings.xml
+        misc.xml
+        modules.xml
+        uiDesigner.xml
+        workspace.xml
+    Ares-system/
+        pom.xml
+        src/
+            main/
+                java/
+                    org/
+                        startear/
+                            ares/
+                                AresApplication.java
+                                config/
+                                    SwaggerConfig.java
+                                controller/
+                                    HelloController.java
+                                mapper/
+                                    UserMapper.java
+                                model/
+                                    User.java
+                                service/
+                                    UserService.java
+                                    impl/
+                resources/
+                    application.yml
+                    mapper/
+                        UserMapper.xml
+            test/
+                java/
+        target/
+            Ares-system-1.0-SNAPSHOT.jar
+            Ares-system-1.0-SNAPSHOT.jar.original
+            classes/
+                application.yml
+                org/
+                    startear/
+                        ares/
+                            AresApplication.class
+                            config/
+                                SwaggerConfig.class
+                            controller/
+                                HelloController.class
+            generated-sources/
+                annotations/
+            generated-test-sources/
+                test-annotations/
+            maven-archiver/
+                pom.properties
+            maven-status/
+                maven-compiler-plugin/
+                    compile/
+                        default-compile/
+                            createdFiles.lst
+                            inputFiles.lst
+                    testCompile/
+                        default-testCompile/
+                            createdFiles.lst
+                            inputFiles.lst
+            test-classes/
+    Ares-ui/
+
+
+=== 文件详情 ===
+
+
+■ 文件名: ai必须执行本文件内要求.txt
+■ 路径: ai必须执行本文件内要求.txt
+--------------------------------------------------
+为了防止ai忘记用户的本来目标和意图，特此创建本文本文档来让ai了解用户对话的目的
+
+项目名称：ai健康助手
+项目目的：在计算机设计大赛中取得国家级一等奖
+计划：后台管理系统+小程序或app，后台管理系统使用springboot+vue，小程序或app使用uniapp，后端采用springboot+mybatis+mysql，前端采用vue+element-ui，小程序或app采用uniapp+uview，与ai的对接内容可以考虑在服务器上运行模型，或者是接入其他大语言模型
+目前的难点：团队内三人无实际项目基础，但有一定的计算机基础，团队成员大二下学期，你作为ai回复时要注意到这一点
+项目目前的目标：实现用户登录注册，数据库的CRUD操作
+
+为了检测ai是否真的读取到了这段话以及文本文档内所有内容，你在输出内容时必须先说一句：“扣1送地狱火”
+
+
+■ 文件名: Ares.iml
+■ 路径: Ares.iml
+--------------------------------------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="GENERAL_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
+
+
+■ 文件名: scan.py
+■ 路径: scan.py
+--------------------------------------------------
+import os
+import sys
+
+def scan_directory(output_file):
+    # 获取当前脚本所在目录
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+
+    with open(output_file, 'w', encoding='utf-8') as f_out:
+        # 写入目录结构
+        f_out.write("=== 目录结构 ===\n")
+        for root, dirs, files in os.walk(base_dir):
+            level = root.replace(base_dir, '').count(os.sep)
+            indent = ' ' * 4 * level
+            f_out.write(f'{indent}{os.path.basename(root)}/\n')
+            sub_indent = ' ' * 4 * (level + 1)
+            for file in files:
+                f_out.write(f'{sub_indent}{file}\n')
+
+        f_out.write("\n\n=== 文件详情 ===\n")
+
+        # 遍历所有文件
+        for root, dirs, files in os.walk(base_dir):
+            for file in files:
+                file_path = os.path.join(root, file)
+                relative_path = os.path.relpath(file_path, base_dir)
+
+                try:
+                    # 跳过生成的输出文件本身
+                    if file_path == os.path.abspath(output_file):
+                        continue
+
+                    # 写入文件信息
+                    f_out.write(f"\n\n■ 文件名: {file}\n")
+                    f_out.write(f"■ 路径: {relative_path}\n")
+                    f_out.write("-" * 50 + "\n")
+
+                    # 尝试读取文件内容
+                    with open(file_path, 'r', encoding='utf-8') as f_in:
+                        content = f_in.read()
+                        f_out.write(content + "\n")
+                except UnicodeDecodeError:
+                    # 处理二进制文件
+                    f_out.write("[二进制文件内容无法显示]\n")
+                except Exception as e:
+                    f_out.write(f"[文件读取错误: {str(e)}]\n")
+
+if __name__ == "__main__":
+    output_filename = "project_structure.txt"
+    scan_directory(output_filename)
+    print(f"扫描完成，结果已保存到 {output_filename}")
+
+
+■ 文件名: 记录.txt
+■ 路径: 记录.txt
+--------------------------------------------------
+3/8 17:46 调教完ai后搞了一半的数据库
+
+
+■ 文件名: 项目规划.drawio
+■ 路径: 项目规划.drawio
+--------------------------------------------------
+<mxfile host="Electron" modified="2025-03-08T08:19:02.555Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.4.13 Chrome/124.0.6367.207 Electron/30.0.6 Safari/537.36" etag="nCybzUfdDYyYH859p1Xb" version="24.4.13" type="device">
+  <diagram name="第 1 页" id="yT4qRhNYLVPrFPe1Tg_A">
+    <mxGraphModel dx="707" dy="820" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="C6AVeIka36zln9bHl0rQ-1" value="核心模块" style="whiteSpace=wrap;strokeWidth=2;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="20" y="213" width="173" height="361" as="geometry" />
+        </mxCell>
+        <mxCell id="C6AVeIka36zln9bHl0rQ-2" value="饮食分析" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="69" y="347" width="81" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="C6AVeIka36zln9bHl0rQ-3" value="用户模块" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="60" y="238" width="79" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="C6AVeIka36zln9bHl0rQ-4" value="健康报告" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="69" y="431" width="80" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="C6AVeIka36zln9bHl0rQ-5" value="数据可视化" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="61" y="515" width="97" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="C6AVeIka36zln9bHl0rQ-6" value="技术栈" style="whiteSpace=wrap;strokeWidth=2;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="213" y="20" width="447" height="277" as="geometry" />
+        </mxCell>
+        <mxCell id="C6AVeIka36zln9bHl0rQ-7" value="MySQL数据库" style="rounded=1;absoluteArcSize=1;arcSize=14;whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="248" y="238" width="110" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="C6AVeIka36zln9bHl0rQ-8" value="SpringBoot后端" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="403" y="129" width="125" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="C6AVeIka36zln9bHl0rQ-9" value="Redis缓存" style="rounded=1;absoluteArcSize=1;arcSize=14;whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="423" y="238" width="85" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="C6AVeIka36zln9bHl0rQ-10" value="AI服务" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="562" y="238" width="63" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="C6AVeIka36zln9bHl0rQ-11" value="UniApp小程序" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="250" y="45" width="114" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="C6AVeIka36zln9bHl0rQ-12" value="Vue后台管理系统" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="487" y="45" width="138" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="C6AVeIka36zln9bHl0rQ-13" value="" style="curved=1;startArrow=none;endArrow=block;exitX=-0.00134375;exitY=0.9733184353440917;entryX=0.4948153409090909;entryY=0;rounded=0;" edge="1" parent="1" source="C6AVeIka36zln9bHl0rQ-8" target="C6AVeIka36zln9bHl0rQ-7">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="302" y="188" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="C6AVeIka36zln9bHl0rQ-14" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.49759375;exitY=1;entryX=0.49646139705882353;entryY=0;rounded=0;" edge="1" parent="1" source="C6AVeIka36zln9bHl0rQ-8" target="C6AVeIka36zln9bHl0rQ-9">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="C6AVeIka36zln9bHl0rQ-15" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.9115386904761904;exitY=1;entryX=0.4926215277777778;entryY=0;rounded=0;" edge="1" parent="1" source="C6AVeIka36zln9bHl0rQ-8" target="C6AVeIka36zln9bHl0rQ-10">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="593" y="188" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="C6AVeIka36zln9bHl0rQ-16" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.5015076754385965;exitY=1;entryX=-0.00134375;entryY=0.012477916639403223;rounded=0;" edge="1" parent="1" source="C6AVeIka36zln9bHl0rQ-11" target="C6AVeIka36zln9bHl0rQ-8">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="307" y="104" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="C6AVeIka36zln9bHl0rQ-17" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.49685801630434784;exitY=1;entryX=0.7902113095238096;entryY=0;rounded=0;" edge="1" parent="1" source="C6AVeIka36zln9bHl0rQ-12" target="C6AVeIka36zln9bHl0rQ-8">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="556" y="104" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="C6AVeIka36zln9bHl0rQ-18" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.4936708860759494;exitY=1;entryX=0.443856554967666;entryY=0;rounded=0;" edge="1" parent="1" source="C6AVeIka36zln9bHl0rQ-3" target="C6AVeIka36zln9bHl0rQ-2">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="99" y="322" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="C6AVeIka36zln9bHl0rQ-19" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.49382716049382713;exitY=1;entryX=0.5;entryY=0;rounded=0;" edge="1" parent="1" source="C6AVeIka36zln9bHl0rQ-2" target="C6AVeIka36zln9bHl0rQ-4">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="C6AVeIka36zln9bHl0rQ-20" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.4948453608247423;entryY=0;rounded=0;" edge="1" parent="1" source="C6AVeIka36zln9bHl0rQ-4" target="C6AVeIka36zln9bHl0rQ-5">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="C6AVeIka36zln9bHl0rQ-21" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.4926215277777778;exitY=1;entryX=0.6524838330393886;entryY=0;rounded=0;" edge="1" parent="1" source="C6AVeIka36zln9bHl0rQ-10" target="C6AVeIka36zln9bHl0rQ-2">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="593" y="297" />
+              <mxPoint x="141" y="322" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
+
+
+
+■ 文件名: .gitignore
+■ 路径: .idea\.gitignore
+--------------------------------------------------
+# 默认忽略的文件
+/shelf/
+/workspace.xml
+# 基于编辑器的 HTTP 客户端请求
+/httpRequests/
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+
+
+
+■ 文件名: compiler.xml
+■ 路径: .idea\compiler.xml
+--------------------------------------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="Ares-system" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Ares-system" options="-parameters" />
+    </option>
+  </component>
+</project>
+
+
+■ 文件名: encodings.xml
+■ 路径: .idea\encodings.xml
+--------------------------------------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/Ares-system/src/main/java" charset="UTF-8" />
+  </component>
+</project>
+
+
+■ 文件名: jarRepositories.xml
+■ 路径: .idea\jarRepositories.xml
+--------------------------------------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="RemoteRepositoriesConfiguration">
+    <remote-repository>
+      <option name="id" value="central" />
+      <option name="name" value="Central Repository" />
+      <option name="url" value="https://repo.maven.apache.org/maven2" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="central" />
+      <option name="name" value="Maven Central repository" />
+      <option name="url" value="https://repo1.maven.org/maven2" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="aliyun" />
+      <option name="name" value="aliyun" />
+      <option name="url" value="https://maven.aliyun.com/repository/public" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="jboss.community" />
+      <option name="name" value="JBoss Community repository" />
+      <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
+    </remote-repository>
+  </component>
+</project>
+
+
+■ 文件名: MarsCodeWorkspaceAppSettings.xml
+■ 路径: .idea\MarsCodeWorkspaceAppSettings.xml
+--------------------------------------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="com.codeverse.userSettings.MarscodeWorkspaceAppSettingsState">
+    <option name="ckgOperationStatus" value="SUCCESS" />
+  </component>
+</project>
+
+
+■ 文件名: misc.xml
+■ 路径: .idea\misc.xml
+--------------------------------------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/Ares-system/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
+</project>
+
+
+■ 文件名: modules.xml
+■ 路径: .idea\modules.xml
+--------------------------------------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Ares.iml" filepath="$PROJECT_DIR$/Ares.iml" />
+    </modules>
+  </component>
+</project>
+
+
+■ 文件名: uiDesigner.xml
+■ 路径: .idea\uiDesigner.xml
+--------------------------------------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Palette2">
+    <group name="Swing">
+      <item class="com.intellij.uiDesigner.HSpacer" tooltip-text="Horizontal Spacer" icon="/com/intellij/uiDesigner/icons/hspacer.svg" removable="false" auto-create-binding="false" can-attach-label="false">
+        <default-constraints vsize-policy="1" hsize-policy="6" anchor="0" fill="1" />
+      </item>
+      <item class="com.intellij.uiDesigner.VSpacer" tooltip-text="Vertical Spacer" icon="/com/intellij/uiDesigner/icons/vspacer.svg" removable="false" auto-create-binding="false" can-attach-label="false">
+        <default-constraints vsize-policy="6" hsize-policy="1" anchor="0" fill="2" />
+      </item>
+      <item class="javax.swing.JPanel" icon="/com/intellij/uiDesigner/icons/panel.svg" removable="false" auto-create-binding="false" can-attach-label="false">
+        <default-constraints vsize-policy="3" hsize-policy="3" anchor="0" fill="3" />
+      </item>
+      <item class="javax.swing.JScrollPane" icon="/com/intellij/uiDesigner/icons/scrollPane.svg" removable="false" auto-create-binding="false" can-attach-label="true">
+        <default-constraints vsize-policy="7" hsize-policy="7" anchor="0" fill="3" />
+      </item>
+      <item class="javax.swing.JButton" icon="/com/intellij/uiDesigner/icons/button.svg" removable="false" auto-create-binding="true" can-attach-label="false">
+        <default-constraints vsize-policy="0" hsize-policy="3" anchor="0" fill="1" />
+        <initial-values>
+          <property name="text" value="Button" />
+        </initial-values>
+      </item>
+      <item class="javax.swing.JRadioButton" icon="/com/intellij/uiDesigner/icons/radioButton.svg" removable="false" auto-create-binding="true" can-attach-label="false">
+        <default-constraints vsize-policy="0" hsize-policy="3" anchor="8" fill="0" />
+        <initial-values>
+          <property name="text" value="RadioButton" />
+        </initial-values>
+      </item>
+      <item class="javax.swing.JCheckBox" icon="/com/intellij/uiDesigner/icons/checkBox.svg" removable="false" auto-create-binding="true" can-attach-label="false">
+        <default-constraints vsize-policy="0" hsize-policy="3" anchor="8" fill="0" />
+        <initial-values>
+          <property name="text" value="CheckBox" />
+        </initial-values>
+      </item>
+      <item class="javax.swing.JLabel" icon="/com/intellij/uiDesigner/icons/label.svg" removable="false" auto-create-binding="false" can-attach-label="false">
+        <default-constraints vsize-policy="0" hsize-policy="0" anchor="8" fill="0" />
+        <initial-values>
+          <property name="text" value="Label" />
+        </initial-values>
+      </item>
+      <item class="javax.swing.JTextField" icon="/com/intellij/uiDesigner/icons/textField.svg" removable="false" auto-create-binding="true" can-attach-label="true">
+        <default-constraints vsize-policy="0" hsize-policy="6" anchor="8" fill="1">
+          <preferred-size width="150" height="-1" />
+        </default-constraints>
+      </item>
+      <item class="javax.swing.JPasswordField" icon="/com/intellij/uiDesigner/icons/passwordField.svg" removable="false" auto-create-binding="true" can-attach-label="true">
+        <default-constraints vsize-policy="0" hsize-policy="6" anchor="8" fill="1">
+          <preferred-size width="150" height="-1" />
+        </default-constraints>
+      </item>
+      <item class="javax.swing.JFormattedTextField" icon="/com/intellij/uiDesigner/icons/formattedTextField.svg" removable="false" auto-create-binding="true" can-attach-label="true">
+        <default-constraints vsize-policy="0" hsize-policy="6" anchor="8" fill="1">
+          <preferred-size width="150" height="-1" />
+        </default-constraints>
+      </item>
+      <item class="javax.swing.JTextArea" icon="/com/intellij/uiDesigner/icons/textArea.svg" removable="false" auto-create-binding="true" can-attach-label="true">
+        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3">
+          <preferred-size width="150" height="50" />
+        </default-constraints>
+      </item>
+      <item class="javax.swing.JTextPane" icon="/com/intellij/uiDesigner/icons/textPane.svg" removable="false" auto-create-binding="true" can-attach-label="true">
+        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3">
+          <preferred-size width="150" height="50" />
+        </default-constraints>
+      </item>
+      <item class="javax.swing.JEditorPane" icon="/com/intellij/uiDesigner/icons/editorPane.svg" removable="false" auto-create-binding="true" can-attach-label="true">
+        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3">
+          <preferred-size width="150" height="50" />
+        </default-constraints>
+      </item>
+      <item class="javax.swing.JComboBox" icon="/com/intellij/uiDesigner/icons/comboBox.svg" removable="false" auto-create-binding="true" can-attach-label="true">
+        <default-constraints vsize-policy="0" hsize-policy="2" anchor="8" fill="1" />
+      </item>
+      <item class="javax.swing.JTable" icon="/com/intellij/uiDesigner/icons/table.svg" removable="false" auto-create-binding="true" can-attach-label="false">
+        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3">
+          <preferred-size width="150" height="50" />
+        </default-constraints>
+      </item>
+      <item class="javax.swing.JList" icon="/com/intellij/uiDesigner/icons/list.svg" removable="false" auto-create-binding="true" can-attach-label="false">
+        <default-constraints vsize-policy="6" hsize-policy="2" anchor="0" fill="3">
+          <preferred-size width="150" height="50" />
+        </default-constraints>
+      </item>
+      <item class="javax.swing.JTree" icon="/com/intellij/uiDesigner/icons/tree.svg" removable="false" auto-create-binding="true" can-attach-label="false">
+        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3">
+          <preferred-size width="150" height="50" />
+        </default-constraints>
+      </item>
+      <item class="javax.swing.JTabbedPane" icon="/com/intellij/uiDesigner/icons/tabbedPane.svg" removable="false" auto-create-binding="true" can-attach-label="false">
+        <default-constraints vsize-policy="3" hsize-policy="3" anchor="0" fill="3">
+          <preferred-size width="200" height="200" />
+        </default-constraints>
+      </item>
+      <item class="javax.swing.JSplitPane" icon="/com/intellij/uiDesigner/icons/splitPane.svg" removable="false" auto-create-binding="false" can-attach-label="false">
+        <default-constraints vsize-policy="3" hsize-policy="3" anchor="0" fill="3">
+          <preferred-size width="200" height="200" />
+        </default-constraints>
+      </item>
+      <item class="javax.swing.JSpinner" icon="/com/intellij/uiDesigner/icons/spinner.svg" removable="false" auto-create-binding="true" can-attach-label="true">
+        <default-constraints vsize-policy="0" hsize-policy="6" anchor="8" fill="1" />
+      </item>
+      <item class="javax.swing.JSlider" icon="/com/intellij/uiDesigner/icons/slider.svg" removable="false" auto-create-binding="true" can-attach-label="false">
+        <default-constraints vsize-policy="0" hsize-policy="6" anchor="8" fill="1" />
+      </item>
+      <item class="javax.swing.JSeparator" icon="/com/intellij/uiDesigner/icons/separator.svg" removable="false" auto-create-binding="false" can-attach-label="false">
+        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3" />
+      </item>
+      <item class="javax.swing.JProgressBar" icon="/com/intellij/uiDesigner/icons/progressbar.svg" removable="false" auto-create-binding="true" can-attach-label="false">
+        <default-constraints vsize-policy="0" hsize-policy="6" anchor="0" fill="1" />
+      </item>
+      <item class="javax.swing.JToolBar" icon="/com/intellij/uiDesigner/icons/toolbar.svg" removable="false" auto-create-binding="false" can-attach-label="false">
+        <default-constraints vsize-policy="0" hsize-policy="6" anchor="0" fill="1">
+          <preferred-size width="-1" height="20" />
+        </default-constraints>
+      </item>
+      <item class="javax.swing.JToolBar$Separator" icon="/com/intellij/uiDesigner/icons/toolbarSeparator.svg" removable="false" auto-create-binding="false" can-attach-label="false">
+        <default-constraints vsize-policy="0" hsize-policy="0" anchor="0" fill="1" />
+      </item>
+      <item class="javax.swing.JScrollBar" icon="/com/intellij/uiDesigner/icons/scrollbar.svg" removable="false" auto-create-binding="true" can-attach-label="false">
+        <default-constraints vsize-policy="6" hsize-policy="0" anchor="0" fill="2" />
+      </item>
+    </group>
+  </component>
+</project>
+
+
+■ 文件名: workspace.xml
+■ 路径: .idea\workspace.xml
+--------------------------------------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="87f2a4db-db2c-4eee-a190-def1fd02555d" name="更改" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
+  <component name="ProjectId" id="2u1a3clSpesOjgahhsmT89au0lo" />
+  <component name="ProjectViewState">
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Maven.Ares-system [clean].executor": "Run",
+    "Maven.Ares-system [install].executor": "Run",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "Spring Boot.AresApplication.executor": "Run",
+    "jdk.selected.JAVA_MODULE": "21",
+    "kotlin-language-version-configured": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "模块",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration name="AresApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="Ares-system" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="org.startear.ares.AresApplication" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.startear.ares.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Spring Boot.AresApplication" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="应用程序级" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="默认任务">
+      <changelist id="87f2a4db-db2c-4eee-a190-def1fd02555d" name="更改" comment="" />
+      <created>1741418338654</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1741418338654</updated>
+      <workItem from="1741418339980" duration="2743000" />
+      <workItem from="1741422235382" duration="2607000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
+
+
+■ 文件名: pom.xml
+■ 路径: Ares-system\pom.xml
+--------------------------------------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.startear</groupId>
+    <artifactId>Ares-system</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.4</version>
+        <relativePath/>
+    </parent>
+
+    <properties>
+        <java.version>21</java.version>
+        <!-- 统一管理依赖版本 -->
+        <springdoc.version>2.3.0</springdoc.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- SpringDoc OpenAPI -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>${springdoc.version}</version>
+        </dependency>
+
+        <!-- 原有依赖基础上新增 -->
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <version>3.0.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <!-- 推荐添加Lombok简化实体类 -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!-- 数据库连接池 -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>1.2.20</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <!-- 添加阿里云镜像加速 -->
+    <repositories>
+        <repository>
+            <id>aliyun</id>
+            <url>https://maven.aliyun.com/repository/public</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+</project>
+
+
+■ 文件名: AresApplication.java
+■ 路径: Ares-system\src\main\java\org\startear\ares\AresApplication.java
+--------------------------------------------------
+package org.startear.ares;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class AresApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(AresApplication.class, args);
+    }
+}
+
+
+■ 文件名: SwaggerConfig.java
+■ 路径: Ares-system\src\main\java\org\startear\ares\config\SwaggerConfig.java
+--------------------------------------------------
+package org.startear.ares.config;
+
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class SwaggerConfig {
+    @Bean
+    public OpenAPI customOpenAPI() {
+        return new OpenAPI()
+                .info(new Info()
+                        .title("Ares System API")
+                        .version("1.0")
+                        .description("健康管理系统接口文档"));
+    }
+}
+
+
+■ 文件名: HelloController.java
+■ 路径: Ares-system\src\main\java\org\startear\ares\controller\HelloController.java
+--------------------------------------------------
+package org.startear.ares.controller;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+import io.swagger.v3.oas.annotations.Operation;
+
+@RestController
+public class HelloController {
+    @Operation(summary = "测试接口", description = "返回欢迎信息")
+    @GetMapping("/hello")
+    public String hello() {
+        return "Hello Spring Boot!";
+    }
+}
+
+
+■ 文件名: UserMapper.java
+■ 路径: Ares-system\src\main\java\org\startear\ares\mapper\UserMapper.java
+--------------------------------------------------
+package org.startear.ares.mapper;
+
+import org.apache.ibatis.annotations.Mapper;
+import org.startear.ares.model.User;
+
+@Mapper
+public interface UserMapper {
+    int insertUser(User user);
+    User selectUserById(Long id);
+    User selectUserByUsername(String username);
+    int updateUser(User user);
+    int deleteUser(Long id);
+}
+
+
+■ 文件名: User.java
+■ 路径: Ares-system\src\main\java\org\startear\ares\model\User.java
+--------------------------------------------------
+package org.startear.ares.model;
+
+import lombok.Data;
+
+@Data
+public class User {
+    private Long id;
+    private String username;
+    private String password;
+    private String email;
+    private String createTime;
+}
+
+
+■ 文件名: UserService.java
+■ 路径: Ares-system\src\main\java\org\startear\ares\service\UserService.java
+--------------------------------------------------
+package org.startear.ares.service;
+
+import org.startear.ares.mapper.UserMapper;
+import org.startear.ares.model.User;
+import org.springframework.stereotype.Service;
+
+@Service
+public class UserService {
+    private final UserMapper userMapper;
+
+    public UserService(UserMapper userMapper) {
+        this.userMapper = userMapper;
+    }
+
+    public User register(User user) {
+        userMapper.insertUser(user);
+        return user;
+    }
+
+    public User login(String username, String password) {
+        User user = userMapper.selectUserByUsername(username);
+        if(user != null && user.getPassword().equals(password)) {
+            return user;
+        }
+        return null;
+    }
+}
+
+
+■ 文件名: application.yml
+■ 路径: Ares-system\src\main\resources\application.yml
+--------------------------------------------------
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/ares_db?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+    type: com.alibaba.druid.pool.DruidDataSource
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: org.startear.ares.model
+
+spring:
+  application:
+    name: Ares-System
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui
+    # 删除url配置
+
+
+■ 文件名: UserMapper.xml
+■ 路径: Ares-system\src\main\resources\mapper\UserMapper.xml
+--------------------------------------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.startear.ares.mapper.UserMapper">
+    <insert id="insertUser" parameterType="User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO user
+            (username, password, email)
+        VALUES (#{username}, #{password}, #{email})
+    </insert>
+
+    <select id="selectUserById" resultType="User">
+        SELECT * FROM user WHERE id = #{id}
+    </select>
+
+    <select id="selectUserByUsername" resultType="User">
+        SELECT * FROM user WHERE username = #{username}
+    </select>
+</mapper>
+
+
+■ 文件名: Ares-system-1.0-SNAPSHOT.jar
+■ 路径: Ares-system\target\Ares-system-1.0-SNAPSHOT.jar
+--------------------------------------------------
+[二进制文件内容无法显示]
+
+
+■ 文件名: Ares-system-1.0-SNAPSHOT.jar.original
+■ 路径: Ares-system\target\Ares-system-1.0-SNAPSHOT.jar.original
+--------------------------------------------------
+[二进制文件内容无法显示]
+
+
+■ 文件名: application.yml
+■ 路径: Ares-system\target\classes\application.yml
+--------------------------------------------------
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: Ares-System
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui
+    # 删除url配置
+
+
+■ 文件名: AresApplication.class
+■ 路径: Ares-system\target\classes\org\startear\ares\AresApplication.class
+--------------------------------------------------
+[二进制文件内容无法显示]
+
+
+■ 文件名: SwaggerConfig.class
+■ 路径: Ares-system\target\classes\org\startear\ares\config\SwaggerConfig.class
+--------------------------------------------------
+[二进制文件内容无法显示]
+
+
+■ 文件名: HelloController.class
+■ 路径: Ares-system\target\classes\org\startear\ares\controller\HelloController.class
+--------------------------------------------------
+[二进制文件内容无法显示]
+
+
+■ 文件名: pom.properties
+■ 路径: Ares-system\target\maven-archiver\pom.properties
+--------------------------------------------------
+artifactId=Ares-system
+groupId=org.startear
+version=1.0-SNAPSHOT
+
+
+
+■ 文件名: createdFiles.lst
+■ 路径: Ares-system\target\maven-status\maven-compiler-plugin\compile\default-compile\createdFiles.lst
+--------------------------------------------------
+org\startear\ares\AresApplication.class
+org\startear\ares\controller\HelloController.class
+
+
+
+■ 文件名: inputFiles.lst
+■ 路径: Ares-system\target\maven-status\maven-compiler-plugin\compile\default-compile\inputFiles.lst
+--------------------------------------------------
+D:\学习\javaproject\Ares\Ares-system\src\main\java\org\startear\ares\controller\HelloController.java
+D:\学习\javaproject\Ares\Ares-system\src\main\java\org\startear\ares\AresApplication.java
+
+
+
+■ 文件名: createdFiles.lst
+■ 路径: Ares-system\target\maven-status\maven-compiler-plugin\testCompile\default-testCompile\createdFiles.lst
+--------------------------------------------------
+
+
+
+■ 文件名: inputFiles.lst
+■ 路径: Ares-system\target\maven-status\maven-compiler-plugin\testCompile\default-testCompile\inputFiles.lst
+--------------------------------------------------
+
