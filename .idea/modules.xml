@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Ares.iml" filepath="$PROJECT_DIR$/Ares.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ares-vue.iml" filepath="$PROJECT_DIR$/ares-vue.iml" />
     </modules>
   </component>
 </project>
