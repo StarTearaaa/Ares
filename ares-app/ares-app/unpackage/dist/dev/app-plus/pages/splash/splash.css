@@ -1,0 +1,40 @@
+
+.splash-container {
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+.logo {
+	width: 6.25rem;
+	height: 6.25rem;
+	margin-bottom: 0.9375rem;
+	animation: fadeIn 1s ease-in;
+}
+.title {
+	font-size: 1.5rem;
+	color: #ffffff;
+	font-weight: bold;
+	animation: slideUp 0.8s ease-out;
+}
+@keyframes fadeIn {
+from {
+		opacity: 0;
+}
+to {
+		opacity: 1;
+}
+}
+@keyframes slideUp {
+from {
+		transform: translateY(0.625rem);
+		opacity: 0;
+}
+to {
+		transform: translateY(0);
+		opacity: 1;
+}
+}
