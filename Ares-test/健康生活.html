@@ -1,0 +1,2176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>健康生活App原型</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 390px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        
+        .screen {
+            width: 100%;
+            height: 844px;
+            position: relative;
+            overflow: hidden;
+            display: none;
+        }
+        
+        .screen.active {
+            display: block;
+        }
+        
+        .status-bar {
+            height: 44px;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .status-bar .time {
+            font-weight: bold;
+        }
+        
+        .status-bar .icons {
+            display: flex;
+        }
+        
+        .status-bar .icons span {
+            margin-left: 5px;
+        }
+        
+        .tab-bar {
+            height: 83px;
+            background-color: #fff;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid #f0f0f0;
+            padding-bottom: 20px;
+        }
+        
+        .tab-bar .tab {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #999;
+            font-size: 10px;
+            cursor: pointer;
+        }
+        
+        .tab-bar .tab.active {
+            color: #4CAF50;
+        }
+        
+        .tab-bar .tab .icon {
+            font-size: 22px;
+            margin-bottom: 4px;
+        }
+        
+        .content {
+            height: calc(100% - 127px);
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: center; /* 改为居中 */
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .header .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .card {
+            background-color: #fff;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .summary-card {
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .summary-card .title {
+            font-size: 18px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .metrics {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .metric {
+            text-align: center;
+        }
+        
+        .metric .value {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .metric .label {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 20px 0 15px;
+        }
+        
+        .activity-list {
+            display: flex;
+            overflow-x: auto;
+            margin: 0 -20px;
+            padding: 0 20px;
+        }
+        
+        .activity-item {
+            min-width: 120px;
+            margin-right: 15px;
+            background-color: #f8f8f8;
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .activity-item .icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+            height: 50px;
+            width: 50px;
+            background-color: #e0f2e9;
+            color: #4CAF50;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .activity-item .name {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        
+        .activity-item .data {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .meal-card {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            background-color: #fff;
+            border-radius: 12px;
+            padding: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .meal-card .image {
+            width: 70px;
+            height: 70px;
+            border-radius: 8px;
+            background-color: #f0f0f0;
+            margin-right: 15px;
+            overflow: hidden;
+        }
+        
+        .meal-card .details {
+            flex: 1;
+        }
+        
+        .meal-card .name {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .meal-card .nutrition {
+            display: flex;
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .meal-card .nutrition span {
+            margin-right: 12px;
+        }
+        
+        .insight-card {
+            background-color: #f0f8ff;
+            border-left: 4px solid #1976D2;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .insight-card .title {
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        
+        .insight-card .title .icon {
+            color: #1976D2;
+            margin-right: 8px;
+        }
+        
+        .insight-card .description {
+            font-size: 14px;
+            color: #333;
+        }
+        
+        .input-field {
+            margin-bottom: 20px;
+        }
+        
+        .input-field label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .input-field input, .input-field select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            width: 100%;
+            cursor: pointer;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+        }
+        
+        .navigation button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        /* 特定页面样式 */
+        #sleep-screen .sleep-chart {
+            height: 200px;
+            background-color: #f9f9f9;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-end;
+            padding: 15px;
+            justify-content: space-between;
+        }
+        
+        #sleep-screen .sleep-chart .bar {
+            width: 12%;
+            background: linear-gradient(to top, #3F51B5, #7986CB);
+            border-radius: 4px 4px 0 0;
+        }
+        
+        #sleep-screen .sleep-stage {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        #sleep-screen .sleep-stage .stage {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #f0f0f0;
+            margin: 0 5px;
+            font-size: 14px;
+        }
+        
+        #sleep-screen .sleep-stage .stage .value {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
+        
+        #food-screen .food-category {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        
+        #food-screen .category-item {
+            width: 25%;
+            text-align: center;
+            padding: 10px;
+        }
+        
+        #food-screen .category-item .icon {
+            height: 50px;
+            width: 50px;
+            background-color: #f0f0f0;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 8px;
+        }
+        
+        #community-screen .post {
+            background-color: #fff;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        #community-screen .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        #community-screen .post-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            margin-right: 10px;
+        }
+        
+        #community-screen .post-user {
+            flex: 1;
+        }
+        
+        #community-screen .post-name {
+            font-weight: 500;
+        }
+        
+        #community-screen .post-time {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        #community-screen .post-content {
+            margin-bottom: 15px;
+        }
+        
+        #community-screen .post-image {
+            width: 100%;
+            height: 200px;
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+        
+        #community-screen .post-actions {
+            display: flex;
+            justify-content: space-between;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        #community-screen .action {
+            display: flex;
+            align-items: center;
+        }
+        
+        #community-screen .action .icon {
+            margin-right: 5px;
+        }
+        
+        /* AI分析页面 */
+        #ai-screen .ai-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        #ai-screen .ai-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6A11CB, #2575FC);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 24px;
+            margin-right: 15px;
+        }
+        
+        #ai-screen .ai-info h2 {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        #ai-screen .ai-info p {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        #ai-screen .chat-container {
+            margin-bottom: 20px;
+        }
+        
+        #ai-screen .message {
+            margin-bottom: 15px;
+            max-width: 80%;
+        }
+        
+        #ai-screen .ai-message {
+            background-color: #f0f0f0;
+            padding: 12px;
+            border-radius: 18px 18px 18px 0;
+            margin-right: auto;
+        }
+        
+        #ai-screen .user-message {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px;
+            border-radius: 18px 18px 0 18px;
+            margin-left: auto;
+        }
+        
+        #ai-screen .input-box {
+            display: flex;
+            background-color: #f5f5f5;
+            border-radius: 25px;
+            padding: 10px;
+        }
+        
+        #ai-screen .input-box input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 5px 10px;
+            font-size: 16px;
+            outline: none;
+        }
+        
+        #ai-screen .input-box .send-btn {
+            width: 36px;
+            height: 36px;
+            background-color: #4CAF50;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+        
+        /* 加载动画 */
+        @keyframes loadingDots {
+            0%, 20% {
+                content: ".";
+            }
+            40% {
+                content: "..";
+            }
+            60%, 100% {
+                content: "...";
+            }
+        }
+        
+        .loading::after {
+            content: "";
+            animation: loadingDots 1.5s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="navigation">
+        <button onclick="prevScreen()">上一页</button>
+        <span id="screen-indicator">1/7</span>
+        <button onclick="nextScreen()">下一页</button>
+    </div>
+    
+    <div class="container">
+        <!-- 登录页面 -->
+        <div id="login-screen" class="screen active">
+            <div class="status-bar">
+                <div class="time">9:41</div>
+                <div class="icons">
+                    <span>📶</span>
+                    <span>🔋</span>
+                </div>
+            </div>
+            
+            <div class="content" style="display: flex; flex-direction: column; justify-content: center; padding: 30px;">
+                <div style="text-align: center; margin-bottom: 50px;">
+                    <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #4CAF50, #2E7D32); border-radius: 20px; margin: 0 auto 20px; display: flex; justify-content: center; align-items: center;">
+                        <span style="font-size: 40px; color: white;">🌱</span>
+                    </div>
+                    <h1 style="font-size: 28px; margin-bottom: 5px;">健康生活</h1>
+                    <p style="color: #666; font-size: 16px;">你的个人健康管理专家</p>
+                </div>
+                
+                <div class="input-field">
+                    <label>手机号码</label>
+                    <input type="tel" placeholder="请输入手机号码">
+                </div>
+                
+                <div class="input-field">
+                    <label>密码</label>
+                    <input type="password" placeholder="请输入密码">
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; margin-bottom: 30px; font-size: 14px;">
+                    <label style="display: flex; align-items: center;">
+                        <input type="checkbox" style="margin-right: 5px;"> 记住我
+                    </label>
+                    <a href="#" style="color: #4CAF50; text-decoration: none;">忘记密码？</a>
+                </div>
+                
+                <button class="button" onclick="switchScreen('home-screen')">登录</button>
+                
+                <div style="text-align: center; margin-top: 30px;">
+                    <p style="margin-bottom: 20px; color: #666;">其他登录方式</p>
+                    <div style="display: flex; justify-content: center; gap: 30px;">
+                        <div style="width: 50px; height: 50px; background-color: #f0f0f0; border-radius: 50%; display: flex; justify-content: center; align-items: center;">
+                            <span style="font-size: 24px;">📱</span>
+                        </div>
+                        <div style="width: 50px; height: 50px; background-color: #f0f0f0; border-radius: 50%; display: flex; justify-content: center; align-items: center;">
+                            <span style="font-size: 24px;">👤</span>
+                        </div>
+                        <div style="width: 50px; height: 50px; background-color: #f0f0f0; border-radius: 50%; display: flex; justify-content: center; align-items: center;">
+                            <span style="font-size: 24px;">✉️</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 40px;">
+                    <p>还没有账号？ <a href="#" style="color: #4CAF50; text-decoration: none;" onclick="switchScreen('register-screen')">立即注册</a></p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 注册页面 -->
+        <div id="register-screen" class="screen">
+            <div class="status-bar">
+                <div class="time">9:41</div>
+                <div class="icons">
+                    <span>📶</span>
+                    <span>🔋</span>
+                </div>
+            </div>
+            
+            <div class="content" style="padding: 30px;">
+                <div style="display: flex; align-items: center; margin-bottom: 30px;">
+                    <div style="width: 40px; height: 40px; background-color: #f0f0f0; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-right: 15px;" onclick="switchScreen('login-screen')">
+                        <span style="font-size: 18px;">←</span>
+                    </div>
+                    <h1 style="font-size: 24px;">创建账号</h1>
+                </div>
+                
+                <div class="input-field">
+                    <label>昵称</label>
+                    <input type="text" placeholder="请输入昵称">
+                </div>
+                
+                <div class="input-field">
+                    <label>手机号码</label>
+                    <input type="tel" placeholder="请输入手机号码">
+                </div>
+                
+                <div class="input-field" style="display: flex; gap: 10px;">
+                    <div style="flex: 2;">
+                        <label>验证码</label>
+                        <input type="text" placeholder="请输入验证码">
+                    </div>
+                    <div style="flex: 1; display: flex; align-items: flex-end;">
+                        <button style="height: 45px; background-color: #f0f0f0; border: none; border-radius: 8px; width: 100%; font-size: 14px;">获取验证码</button>
+                    </div>
+                </div>
+                
+                <div class="input-field">
+                    <label>密码</label>
+                    <input type="password" placeholder="请设置6-20位密码">
+                </div>
+                
+                <div style="display: flex; align-items: center; margin: 20px 0 30px; font-size: 14px; color: #666;">
+                    <input type="checkbox" style="margin-right: 10px;">
+                    <span>我已阅读并同意<a href="#" style="color: #4CAF50; text-decoration: none;">《用户协议》</a>和<a href="#" style="color: #4CAF50; text-decoration: none;">《隐私政策》</a></span>
+                </div>
+                
+                <button class="button" onclick="switchScreen('user-info-screen')">注册</button>
+            </div>
+        </div>
+        
+        <!-- 用户信息填写页面 -->
+        <div id="user-info-screen" class="screen">
+            <div class="status-bar">
+                <div class="time">9:41</div>
+                <div class="icons">
+                    <span>📶</span>
+                    <span>🔋</span>
+                </div>
+            </div>
+            
+            <div class="content" style="padding: 30px;">
+                <div style="text-align: center; margin-bottom: 40px;">
+                    <h1 style="font-size: 24px; margin-bottom: 10px;">完善个人信息</h1>
+                    <p style="color: #666;">帮助我们为你提供更精准的健康服务</p>
+                </div>
+                
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <div style="width: 100px; height: 100px; background-color: #f0f0f0; border-radius: 50%; margin: 0 auto; display: flex; justify-content: center; align-items: center; position: relative;">
+                        <span style="font-size: 40px;">👤</span>
+                        <div style="position: absolute; bottom: 0; right: 0; width: 30px; height: 30px; background-color: #4CAF50; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 14px;">+</div>
+                    </div>
+                    <p style="margin-top: 10px; color: #666; font-size: 14px;">上传头像</p>
+                </div>
+                
+                <div class="input-field">
+                    <label>性别</label>
+                    <div style="display: flex; gap: 10px;">
+                        <button style="flex: 1; padding: 12px; border: 1px solid #4CAF50; background-color: white; border-radius: 8px; color: #4CAF50;">男</button>
+                        <button style="flex: 1; padding: 12px; border: 1px solid #ddd; background-color: white; border-radius: 8px;">女</button>
+                    </div>
+                </div>
+                
+                <div class="input-field">
+                    <label>出生日期</label>
+                    <input type="date">
+                </div>
+                
+                <div class="input-field">
+                    <label>身高 (cm)</label>
+                    <input type="number" placeholder="请输入身高">
+                </div>
+                
+                <div class="input-field">
+                    <label>体重 (kg)</label>
+                    <input type="number" placeholder="请输入体重">
+                </div>
+                
+                <div class="input-field">
+                    <label>健康目标</label>
+                    <select>
+                        <option>保持健康</option>
+                        <option>减肥塑形</option>
+                        <option>增肌</option>
+                        <option>改善睡眠</option>
+                        <option>控制慢性病</option>
+                    </select>
+                </div>
+                
+                <button class="button" onclick="switchScreen('home-screen')">开始健康之旅</button>
+            </div>
+        </div>
+        
+        <!-- 首页/仪表盘 -->
+        <div id="home-screen" class="screen active">
+            <div class="status-bar">
+                <div class="time">9:41</div>
+                <div class="icons">
+                    <span>📶</span>
+                    <span>🔋</span>
+                </div>
+            </div>
+            
+            <div class="content">
+                <div class="header">
+                    <h1>你好，小明</h1>
+                </div>
+                
+                <div class="summary-card">
+                    <div class="title">
+                        <span>今日数据</span>
+                        <span>📊</span>
+                    </div>
+                    <div class="metrics">
+                        <div class="metric">
+                            <div class="value">6,243</div>
+                            <div class="label">步数</div>
+                        </div>
+                        <div class="metric">
+                            <div class="value">312</div>
+                            <div class="label">卡路里</div>
+                        </div>
+                        <div class="metric">
+                            <div class="value">7h12m</div>
+                            <div class="label">睡眠</div>
+                        </div>
+                        <div class="metric">
+                            <div class="value">68</div>
+                            <div class="label">心率</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section-title">活动</div>
+                <div class="activity-list">
+                    <div class="activity-item">
+                        <div class="icon">🏃</div>
+                        <div class="name">跑步</div>
+                        <div class="data">30分钟</div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="icon">💪</div>
+                        <div class="name">力量训练</div>
+                        <div class="data">45分钟</div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="icon">🧘</div>
+                        <div class="name">冥想</div>
+                        <div class="data">15分钟</div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="icon">🚶</div>
+                        <div class="name">步行</div>
+                        <div class="data">60分钟</div>
+                    </div>
+                </div>
+                
+                <div class="section-title">AI健康见解</div>
+                <div class="insight-card">
+                    <div class="title">
+                        <span class="icon">💡</span>
+                        <span>睡眠建议</span>
+                    </div>
+                    <div class="description">
+                        根据你最近一周的睡眠数据，建议尝试提前30分钟入睡，以优化你的睡眠周期。
+                    </div>
+                </div>
+                <div class="insight-card">
+                    <div class="title">
+                        <span class="icon">💡</span>
+                        <span>活动建议</span>
+                    </div>
+                    <div class="description">
+                        你已经连续三天达到步行目标了！明天可以尝试增加500步作为新挑战。
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-bar">
+                <div class="tab active" onclick="switchScreen('home-screen')">
+                    <div class="icon">🏠</div>
+                    <div>首页</div>
+                </div>
+                <div class="tab" onclick="switchScreen('sleep-screen')">
+                    <div class="icon">😴</div>
+                    <div>睡眠</div>
+                </div>
+                <div class="tab" onclick="switchScreen('food-screen')">
+                    <div class="icon">🍽️</div>
+                    <div>饮食</div>
+                </div>
+                <div class="tab" onclick="switchScreen('ai-qa-screen')">
+                    <div class="icon">🤖</div>
+                    <div>AI顾问</div>
+                </div>
+                <div class="tab" onclick="switchScreen('profile-screen')">
+                    <div class="icon">👤</div>
+                    <div>我的</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 睡眠页面 -->
+        <div id="sleep-screen" class="screen">
+            <div class="status-bar">
+                <div class="time">9:41</div>
+                <div class="icons">
+                    <span>📶</span>
+                    <span>🔋</span>
+                </div>
+            </div>
+            
+            <div class="content">
+                <div class="header">
+                    <h1>睡眠</h1>
+                </div>
+                
+                <div class="summary-card">
+                    <div class="title">
+                        <span>今日睡眠质量</span>
+                        <span>85%</span>
+                    </div>
+                    <div class="metrics">
+                        <div class="metric">
+                            <div class="value">7h12m</div>
+                            <div class="label">总时长</div>
+                        </div>
+                        <div class="metric">
+                            <div class="value">23:30</div>
+                            <div class="label">入睡</div>
+                        </div>
+                        <div class="metric">
+                            <div class="value">6:42</div>
+                            <div class="label">醒来</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section-title">本周睡眠</div>
+                <div class="sleep-chart">
+                    <div class="bar" style="height: 70%;"></div>
+                    <div class="bar" style="height: 60%;"></div>
+                    <div class="bar" style="height: 80%;"></div>
+                    <div class="bar" style="height: 75%;"></div>
+                    <div class="bar" style="height: 65%;"></div>
+                    <div class="bar" style="height: 85%;"></div>
+                    <div class="bar" style="height: 90%;"></div>
+                </div>
+                
+                <div class="section-title">睡眠阶段</div>
+                <div class="sleep-stage">
+                    <div class="stage">
+                        <div class="value">1h20m</div>
+                        <div>深度睡眠</div>
+                    </div>
+                    <div class="stage">
+                        <div class="value">3h42m</div>
+                        <div>浅度睡眠</div>
+                    </div>
+                    <div class="stage">
+                        <div class="value">2h10m</div>
+                        <div>REM睡眠</div>
+                    </div>
+                </div>
+                
+                <div class="section-title">睡眠建议</div>
+                <div class="insight-card">
+                    <div class="title">
+                        <span class="icon">💡</span>
+                        <span>AI分析</span>
+                    </div>
+                    <div class="description">
+                        你的深度睡眠比例略低。尝试在睡前减少蓝光暴露，并确保卧室温度在18-20°C之间，有助于提高睡眠质量。
+                    </div>
+                </div>
+                
+                <div class="section-title">设置睡眠目标</div>
+                <div class="input-field">
+                    <label>目标睡眠时间</label>
+                    <select>
+                        <option>7小时</option>
+                        <option>7.5小时</option>
+                        <option selected>8小时</option>
+                        <option>8.5小时</option>
+                        <option>9小时</option>
+                    </select>
+                </div>
+                <div class="input-field">
+                    <label>理想就寝时间</label>
+                    <input type="time" value="23:00">
+                </div>
+                <button class="button">保存设置</button>
+            </div>
+            
+            <div class="tab-bar">
+                <div class="tab active" onclick="switchScreen('home-screen')">
+                    <div class="icon">🏠</div>
+                    <div>首页</div>
+                </div>
+                <div class="tab" onclick="switchScreen('sleep-screen')">
+                    <div class="icon">😴</div>
+                    <div>睡眠</div>
+                </div>
+                <div class="tab" onclick="switchScreen('food-screen')">
+                    <div class="icon">🍽️</div>
+                    <div>饮食</div>
+                </div>
+                <div class="tab" onclick="switchScreen('ai-qa-screen')">
+                    <div class="icon">🤖</div>
+                    <div>AI顾问</div>
+                </div>
+                <div class="tab" onclick="switchScreen('profile-screen')">
+                    <div class="icon">👤</div>
+                    <div>我的</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 饮食页面 -->
+        <div id="food-screen" class="screen">
+            <div class="status-bar">
+                <div class="time">9:41</div>
+                <div class="icons">
+                    <span>📶</span>
+                    <span>🔋</span>
+                </div>
+            </div>
+            
+            <div class="content">
+                <div class="header">
+                    <h1>饮食</h1>
+                </div>
+                
+                <div class="summary-card">
+                    <div class="title">
+                        <span>今日营养摄入</span>
+                        <span>🍽️</span>
+                    </div>
+                    <div class="metrics">
+                        <div class="metric">
+                            <div class="value">1,450</div>
+                            <div class="label">卡路里</div>
+                        </div>
+                        <div class="metric">
+                            <div class="value">72g</div>
+                            <div class="label">蛋白质</div>
+                        </div>
+                        <div class="metric">
+                            <div class="value">45g</div>
+                            <div class="label">脂肪</div>
+                        </div>
+                        <div class="metric">
+                            <div class="value">180g</div>
+                            <div class="label">碳水</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section-title">分类浏览</div>
+                <div class="food-category">
+                    <div class="category-item">
+                        <div class="icon">🥗</div>
+                        <div>沙拉</div>
+                    </div>
+                    <div class="category-item">
+                        <div class="icon">🍲</div>
+                        <div>主食</div>
+                    </div>
+                    <div class="category-item">
+                        <div class="icon">🥘</div>
+                        <div>蛋白质</div>
+                    </div>
+                    <div class="category-item">
+                        <div class="icon">🍹</div>
+                        <div>饮品</div>
+                    </div>
+                    <div class="category-item">
+                        <div class="icon">🍎</div>
+                        <div>水果</div>
+                    </div>
+                    <div class="category-item">
+                        <div class="icon">🥕</div>
+                        <div>蔬菜</div>
+                    </div>
+                    <div class="category-item">
+                        <div class="icon">🍪</div>
+                        <div>零食</div>
+                    </div>
+                    <div class="category-item">
+                        <div class="icon">📋</div>
+                        <div>全部</div>
+                    </div>
+                </div>
+                
+                <div class="section-title">今日饮食记录</div>
+                <div class="meal-card">
+                    <div class="image">🍳</div>
+                    <div class="details">
+                        <div class="name">早餐：燕麦粥 + 煮鸡蛋</div>
+                        <div class="nutrition">
+                            <span>350 卡路里</span>
+                            <span>15g 蛋白质</span>
+                            <span>8g 脂肪</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="meal-card">
+                    <div class="image">🥗</div>
+                    <div class="details">
+                        <div class="name">午餐：蔬菜沙拉 + 烤鸡胸肉</div>
+                        <div class="nutrition">
+                            <span>520 卡路里</span>
+                            <span>35g 蛋白质</span>
+                            <span>12g 脂肪</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="meal-card">
+                    <div class="image">🍜</div>
+                    <div class="details">
+                        <div class="name">晚餐：糙米饭 + 清蒸鱼</div>
+                        <div class="nutrition">
+                            <span>580 卡路里</span>
+                            <span>22g 蛋白质</span>
+                            <span>15g 脂肪</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section-title">AI推荐食谱</div>
+                <div class="insight-card">
+                    <div class="title">
+                        <span class="icon">🍲</span>
+                        <span>晚餐推荐</span>
+                    </div>
+                    <div class="description">
+                        基于你的运动情况和营养需求，今晚可以尝试地中海风味烤鲑鱼配藜麦沙拉，增加对Omega-3的摄入。
+                    </div>
+                </div>
+                
+                <div class="section-title">添加食物</div>
+                <div class="input-field">
+                    <label>食物名称</label>
+                    <input type="text" placeholder="搜索或输入食物">
+                </div>
+                <div class="input-field">
+                    <label>进餐时间</label>
+                    <select>
+                        <option>早餐</option>
+                        <option>午餐</option>
+                        <option selected>晚餐</option>
+                        <option>加餐</option>
+                    </select>
+                </div>
+                <button class="button">记录食物</button>
+            </div>
+            
+            <div class="tab-bar">
+                <div class="tab active" onclick="switchScreen('home-screen')">
+                    <div class="icon">🏠</div>
+                    <div>首页</div>
+                </div>
+                <div class="tab" onclick="switchScreen('sleep-screen')">
+                    <div class="icon">😴</div>
+                    <div>睡眠</div>
+                </div>
+                <div class="tab" onclick="switchScreen('food-screen')">
+                    <div class="icon">🍽️</div>
+                    <div>饮食</div>
+                </div>
+                <div class="tab" onclick="switchScreen('ai-qa-screen')">
+                    <div class="icon">🤖</div>
+                    <div>AI顾问</div>
+                </div>
+                <div class="tab" onclick="switchScreen('profile-screen')">
+                    <div class="icon">👤</div>
+                    <div>我的</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 社区页面 -->
+        <div id="community-screen" class="screen">
+            <div class="status-bar">
+                <div class="time">9:41</div>
+                <div class="icons">
+                    <span>📶</span>
+                    <span>🔋</span>
+                </div>
+            </div>
+            
+            <div class="content">
+                <div class="header">
+                    <h1>健康社区</h1>
+                </div>
+                
+                <div class="post">
+                    <div class="post-header">
+                        <div class="post-avatar">👩</div>
+                        <div class="post-user">
+                            <div class="post-name">李小花</div>
+                            <div class="post-time">2小时前</div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        今天完成了10公里跑步挑战！坚持就是胜利，大家一起加油！💪
+                    </div>
+                    <div class="post-image">🏃‍♀️</div>
+                    <div class="post-actions">
+                        <div class="action">
+                            <span class="icon">❤️</span>
+                            <span>56</span>
+                        </div>
+                        <div class="action">
+                            <span class="icon">💬</span>
+                            <span>12</span>
+                        </div>
+                        <div class="action">
+                            <span class="icon">🔄</span>
+                            <span>分享</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="post">
+                    <div class="post-header">
+                        <div class="post-avatar">👨</div>
+                        <div class="post-user">
+                            <div class="post-name">张大山</div>
+                            <div class="post-time">昨天</div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        分享一个低脂高蛋白的早餐食谱，简单又美味，帮我坚持减脂一个月已经瘦了5公斤！
+                    </div>
+                    <div class="post-image">🍳</div>
+                    <div class="post-actions">
+                        <div class="action">
+                            <span class="icon">❤️</span>
+                            <span>128</span>
+                        </div>
+                        <div class="action">
+                            <span class="icon">💬</span>
+                            <span>43</span>
+                        </div>
+                        <div class="action">
+                            <span class="icon">🔄</span>
+                            <span>分享</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="post">
+                    <div class="post-header">
+                        <div class="post-avatar">👧</div>
+                        <div class="post-user">
+                            <div class="post-name">王小美</div>
+                            <div class="post-time">3天前</div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        连续使用冥想功能一个月，感觉压力减轻了很多，睡眠质量也提高了！推荐给有压力的小伙伴们～
+                    </div>
+                    <div class="post-image">🧘‍♀️</div>
+                    <div class="post-actions">
+                        <div class="action">
+                            <span class="icon">❤️</span>
+                            <span>89</span>
+                        </div>
+                        <div class="action">
+                            <span class="icon">💬</span>
+                            <span>27</span>
+                        </div>
+                        <div class="action">
+                            <span class="icon">🔄</span>
+                            <span>分享</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section-title">热门挑战</div>
+                <div class="activity-list">
+                    <div class="activity-item">
+                        <div class="icon">🏃</div>
+                        <div class="name">30天跑步</div>
+                        <div class="data">2.5k参与</div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="icon">💧</div>
+                        <div class="name">每日2升水</div>
+                        <div class="data">5.8k参与</div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="icon">🥗</div>
+                        <div class="name">健康饮食周</div>
+                        <div class="data">1.3k参与</div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="icon">🧘</div>
+                        <div class="name">21天冥想</div>
+                        <div class="data">3.1k参与</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-bar">
+                <div class="tab active" onclick="switchScreen('home-screen')">
+                    <div class="icon">🏠</div>
+                    <div>首页</div>
+                </div>
+                <div class="tab" onclick="switchScreen('sleep-screen')">
+                    <div class="icon">😴</div>
+                    <div>睡眠</div>
+                </div>
+                <div class="tab" onclick="switchScreen('food-screen')">
+                    <div class="icon">🍽️</div>
+                    <div>饮食</div>
+                </div>
+                <div class="tab" onclick="switchScreen('ai-qa-screen')">
+                    <div class="icon">🤖</div>
+                    <div>AI顾问</div>
+                </div>
+                <div class="tab" onclick="switchScreen('profile-screen')">
+                    <div class="icon">👤</div>
+                    <div>我的</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- AI健康顾问页面 -->
+        <div id="ai-screen" class="screen">
+            <div class="status-bar">
+                <div class="time">9:41</div>
+                <div class="icons">
+                    <span>📶</span>
+                    <span>🔋</span>
+                </div>
+            </div>
+            
+            <div class="content">
+                <div class="ai-header">
+                    <div class="ai-avatar">🤖</div>
+                    <div class="ai-info">
+                        <h2>健康AI顾问</h2>
+                        <p>基于你的健康数据提供个性化建议</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="section-title">健康洞察</div>
+                    <div class="insight-card">
+                        <div class="title">
+                            <span class="icon">📈</span>
+                            <span>数据趋势</span>
+                        </div>
+                        <div class="description">
+                            过去两周，你的平均每日步数增加了15%，睡眠质量提升了8%，继续保持！
+                        </div>
+                    </div>
+                    <div class="insight-card">
+                        <div class="title">
+                            <span class="icon">🔄</span>
+                            <span>习惯关联</span>
+                        </div>
+                        <div class="description">
+                            数据显示你在有氧运动后的夜晚，深度睡眠时间增加约22分钟。
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chat-container">
+                    <div class="message ai-message">
+                        你好，小明！今天想了解哪方面的健康建议？
+                    </div>
+                    <div class="message user-message">
+                        我最近睡眠不太好，有什么改善方法？
+                    </div>
+                    <div class="message ai-message">
+                        根据你的数据，我注意到你经常在睡前使用手机。建议尝试这些方法：
+                        <br><br>
+                        1. 睡前1小时关闭电子设备，减少蓝光暴露<br>
+                        2. 创建放松的睡前仪式，比如阅读或冥想<br>
+                        3. 保持规律的作息时间<br>
+                        4. 睡前避免咖啡因和重餐<br>
+                        <br>
+                        要不要我为你制定一个改善睡眠的七天计划？
+                    </div>
+                    <div class="message user-message">
+                        好的，谢谢！我还想知道如何提高我的运动效率？
+                    </div>
+                    <div class="message ai-message">
+                        <span class="loading">AI分析你的运动数据中</span>
+                    </div>
+                </div>
+                
+                <div class="input-box">
+                    <input type="text" placeholder="输入你的健康问题...">
+                    <div class="send-btn">➤</div>
+                </div>
+            </div>
+            
+            <div class="tab-bar">
+                <div class="tab active" onclick="switchScreen('home-screen')">
+                    <div class="icon">🏠</div>
+                    <div>首页</div>
+                </div>
+                <div class="tab" onclick="switchScreen('sleep-screen')">
+                    <div class="icon">😴</div>
+                    <div>睡眠</div>
+                </div>
+                <div class="tab" onclick="switchScreen('food-screen')">
+                    <div class="icon">🍽️</div>
+                    <div>饮食</div>
+                </div>
+                <div class="tab" onclick="switchScreen('ai-qa-screen')">
+                    <div class="icon">🤖</div>
+                    <div>AI顾问</div>
+                </div>
+                <div class="tab" onclick="switchScreen('profile-screen')">
+                    <div class="icon">👤</div>
+                    <div>我的</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 运动计划页面 -->
+        <div id="workout-screen" class="screen">
+            <div class="status-bar">
+                <div class="time">9:41</div>
+                <div class="icons">
+                    <span>📶</span>
+                    <span>🔋</span>
+                </div>
+            </div>
+            
+            <div class="content">
+                <div class="header">
+                    <h1>运动计划</h1>
+                </div>
+                
+                <div class="summary-card">
+                    <div class="title">
+                        <span>本周进展</span>
+                        <span>3/5</span>
+                    </div>
+                    <div class="metrics">
+                        <div class="metric">
+                            <div class="value">5</div>
+                            <div class="label">总训练</div>
+                        </div>
+                        <div class="metric">
+                            <div class="value">180</div>
+                            <div class="label">分钟</div>
+                        </div>
+                        <div class="metric">
+                            <div class="value">1240</div>
+                            <div class="label">卡路里</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section-title">今日推荐训练</div>
+                <div class="card" style="padding: 0; overflow: hidden;">
+                    <div style="height: 150px; background-color: #f0f0f0; display: flex; justify-content: center; align-items: center;">
+                        <span style="font-size: 40px;">🏋️‍♂️</span>
+                    </div>
+                    <div style="padding: 15px;">
+                        <h3 style="margin-bottom: 10px;">全身力量训练 - 30分钟</h3>
+                        <p style="color: #666; margin-bottom: 15px;">这套训练包含12个核心动作，适合提高整体力量和肌肉耐力。</p>
+                        <button class="button">开始训练</button>
+                    </div>
+                </div>
+                
+                <div class="section-title">训练分类</div>
+                <div class="activity-list" style="margin-bottom: 20px;">
+                    <div class="activity-item">
+                        <div class="icon">🏃</div>
+                        <div class="name">有氧训练</div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="icon">💪</div>
+                        <div class="name">力量训练</div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="icon">🧘</div>
+                        <div class="name">瑜伽</div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="icon">🚴</div>
+                        <div class="name">骑行</div>
+                    </div>
+                </div>
+                
+                <div class="section-title">训练历史</div>
+                <div class="meal-card">
+                    <div class="image" style="display: flex; justify-content: center; align-items: center;">🏃</div>
+                    <div class="details">
+                        <div class="name">室外跑步</div>
+                        <div class="nutrition">
+                            <span>昨天</span>
+                            <span>5.2公里</span>
+                            <span>28分钟</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="meal-card">
+                    <div class="image" style="display: flex; justify-content: center; align-items: center;">💪</div>
+                    <div class="details">
+                        <div class="name">上肢力量训练</div>
+                        <div class="nutrition">
+                            <span>昨天</span>
+                            <span>45分钟</span>
+                            <span>320卡路里</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="meal-card">
+                    <div class="image" style="display: flex; justify-content: center; align-items: center;">🧘</div>
+                    <div class="details">
+                        <div class="name">冥想练习</div>
+                        <div class="nutrition">
+                            <span>前天</span>
+                            <span>15分钟</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-bar">
+                <div class="tab active" onclick="switchScreen('home-screen')">
+                    <div class="icon">🏠</div>
+                    <div>首页</div>
+                </div>
+                <div class="tab" onclick="switchScreen('sleep-screen')">
+                    <div class="icon">😴</div>
+                    <div>睡眠</div>
+                </div>
+                <div class="tab" onclick="switchScreen('food-screen')">
+                    <div class="icon">🍽️</div>
+                    <div>饮食</div>
+                </div>
+                <div class="tab" onclick="switchScreen('ai-qa-screen')">
+                    <div class="icon">🤖</div>
+                    <div>AI顾问</div>
+                </div>
+                <div class="tab" onclick="switchScreen('profile-screen')">
+                    <div class="icon">👤</div>
+                    <div>我的</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 用户数据分析页面 -->
+        <div id="analysis-screen" class="screen">
+            <div class="status-bar">
+                <div class="time">9:41</div>
+                <div class="icons">
+                    <span>📶</span>
+                    <span>🔋</span>
+                </div>
+            </div>
+            
+            <div class="content">
+                <div class="header">
+                    <h1>健康分析</h1>
+                </div>
+                
+                <div class="summary-card" style="background: linear-gradient(135deg, #6A11CB, #2575FC);">
+                    <div class="title">
+                        <span>AI健康评分</span>
+                        <span>78/100</span>
+                    </div>
+                    <div style="font-size: 14px; margin-bottom: 15px; opacity: 0.9;">
+                        基于你的运动、饮食、睡眠和心理健康综合评估
+                    </div>
+                    <div class="metrics">
+                        <div class="metric">
+                            <div class="value">82</div>
+                            <div class="label">运动</div>
+                        </div>
+                        <div class="metric">
+                            <div class="value">75</div>
+                            <div class="label">饮食</div>
+                        </div>
+                        <div class="metric">
+                            <div class="value">68</div>
+                            <div class="label">睡眠</div>
+                        </div>
+                        <div class="metric">
+                            <div class="value">85</div>
+                            <div class="label">心理</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section-title">关键指标趋势</div>
+                <div style="height: 180px; background-color: #f9f9f9; border-radius: 12px; margin-bottom: 20px; display: flex; justify-content: center; align-items: center;">
+                    📊 趋势图表
+                </div>
+                
+                <div class="section-title">健康洞察</div>
+                <div class="insight-card">
+                    <div class="title">
+                        <span class="icon">💡</span>
+                        <span>饮食模式</span>
+                    </div>
+                    <div class="description">
+                        你的蛋白质摄入符合目标，但碳水化合物偏高。建议增加蔬菜摄入，减少精制碳水的比例。
+                    </div>
+                </div>
+                <div class="insight-card">
+                    <div class="title">
+                        <span class="icon">💡</span>
+                        <span>运动建议</span>
+                    </div>
+                    <div class="description">
+                        数据显示你的心肺功能有提升空间。建议每周增加2-3次中强度有氧训练，每次20-30分钟。
+                    </div>
+                </div>
+                <div class="insight-card">
+                    <div class="title">
+                        <span class="icon">💡</span>
+                        <span>生活习惯</span>
+                    </div>
+                    <div class="description">
+                        工作日和周末的睡眠时间差异过大。建议保持更一致的睡眠时间表，以优化生物钟。
+                    </div>
+                </div>
+                
+                <div class="section-title">健康目标跟踪</div>
+                <div style="background-color: #fff; border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span>减重目标</span>
+                        <span>70%</span>
+                    </div>
+                    <div style="height: 8px; background-color: #f0f0f0; border-radius: 4px; overflow: hidden;">
+                        <div style="height: 100%; width: 70%; background-color: #4CAF50; border-radius: 4px;"></div>
+                    </div>
+                </div>
+                <div style="background-color: #fff; border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span>每日步数</span>
+                        <span>85%</span>
+                    </div>
+                    <div style="height: 8px; background-color: #f0f0f0; border-radius: 4px; overflow: hidden;">
+                        <div style="height: 100%; width: 85%; background-color: #4CAF50; border-radius: 4px;"></div>
+                    </div>
+                </div>
+                <div style="background-color: #fff; border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span>水分摄入</span>
+                        <span>60%</span>
+                    </div>
+                    <div style="height: 8px; background-color: #f0f0f0; border-radius: 4px; overflow: hidden;">
+                        <div style="height: 100%; width: 60%; background-color: #4CAF50; border-radius: 4px;"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-bar">
+                <div class="tab active" onclick="switchScreen('home-screen')">
+                    <div class="icon">🏠</div>
+                    <div>首页</div>
+                </div>
+                <div class="tab" onclick="switchScreen('sleep-screen')">
+                    <div class="icon">😴</div>
+                    <div>睡眠</div>
+                </div>
+                <div class="tab" onclick="switchScreen('food-screen')">
+                    <div class="icon">🍽️</div>
+                    <div>饮食</div>
+                </div>
+                <div class="tab" onclick="switchScreen('ai-qa-screen')">
+                    <div class="icon">🤖</div>
+                    <div>AI顾问</div>
+                </div>
+                <div class="tab" onclick="switchScreen('profile-screen')">
+                    <div class="icon">👤</div>
+                    <div>我的</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 在现有页面后添加个人中心页面 -->
+        <div id="profile-screen" class="screen">
+            <div class="status-bar">
+                <div class="time">9:41</div>
+                <div class="icons">
+                    <span>📶</span>
+                    <span>🔋</span>
+                </div>
+            </div>
+            
+            <div class="content">
+                <div class="header">
+                    <h1>个人中心</h1>
+                </div>
+                
+                <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 30px;">
+                    <div style="width: 100px; height: 100px; background-color: #f0f0f0; border-radius: 50%; margin-bottom: 15px; display: flex; justify-content: center; align-items: center; position: relative;">
+                        <span style="font-size: 40px;">👤</span>
+                        <div style="position: absolute; bottom: 0; right: 0; width: 28px; height: 28px; background-color: #4CAF50; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 14px;">✏️</div>
+                    </div>
+                    <h2 style="font-size: 22px; margin-bottom: 5px;">小明</h2>
+                    <p style="color: #666; margin-bottom: 10px;">ID: health_2023</p>
+                    <div style="display: flex; gap: 15px;">
+                        <div style="text-align: center;">
+                            <div style="font-weight: bold; font-size: 18px;">42</div>
+                            <div style="color: #666; font-size: 14px;">关注</div>
+                        </div>
+                        <div style="width: 1px; background-color: #ddd;"></div>
+                        <div style="text-align: center;">
+                            <div style="font-weight: bold; font-size: 18px;">156</div>
+                            <div style="color: #666; font-size: 14px;">粉丝</div>
+                        </div>
+                        <div style="width: 1px; background-color: #ddd;"></div>
+                        <div style="text-align: center;">
+                            <div style="font-weight: bold; font-size: 18px;">87</div>
+                            <div style="color: #666; font-size: 14px;">获赞</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section-title">我的健康数据</div>
+                <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                    <div style="flex: 1; background-color: #f8f8f8; border-radius: 12px; padding: 15px; text-align: center;">
+                        <div style="font-size: 20px; margin-bottom: 5px;">175cm</div>
+                        <div style="color: #666; font-size: 14px;">身高</div>
+                    </div>
+                    <div style="flex: 1; background-color: #f8f8f8; border-radius: 12px; padding: 15px; text-align: center;">
+                        <div style="font-size: 20px; margin-bottom: 5px;">68kg</div>
+                        <div style="color: #666; font-size: 14px;">体重</div>
+                    </div>
+                    <div style="flex: 1; background-color: #f8f8f8; border-radius: 12px; padding: 15px; text-align: center;">
+                        <div style="font-size: 20px; margin-bottom: 5px;">22.2</div>
+                        <div style="color: #666; font-size: 14px;">BMI</div>
+                    </div>
+                </div>
+                
+                <div class="meal-card" style="display: flex; align-items: center; margin-bottom: 15px;" onclick="switchScreen('settings-screen')">
+                    <div style="width: 40px; margin-right: 15px; display: flex; justify-content: center; color: #4CAF50; font-size: 24px;">⚙️</div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 500;">设置</div>
+                    </div>
+                    <div style="color: #999;">></div>
+                </div>
+                
+                <div class="meal-card" style="display: flex; align-items: center; margin-bottom: 15px;">
+                    <div style="width: 40px; margin-right: 15px; display: flex; justify-content: center; color: #4CAF50; font-size: 24px;">📝</div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 500;">我的记录</div>
+                    </div>
+                    <div style="color: #999;">></div>
+                </div>
+                
+                <div class="meal-card" style="display: flex; align-items: center; margin-bottom: 15px;">
+                    <div style="width: 40px; margin-right: 15px; display: flex; justify-content: center; color: #4CAF50; font-size: 24px;">🔔</div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 500;">消息通知</div>
+                    </div>
+                    <div style="color: #999;">></div>
+                </div>
+                
+                <div class="meal-card" style="display: flex; align-items: center; margin-bottom: 15px;">
+                    <div style="width: 40px; margin-right: 15px; display: flex; justify-content: center; color: #4CAF50; font-size: 24px;">❓</div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 500;">帮助与反馈</div>
+                    </div>
+                    <div style="color: #999;">></div>
+                </div>
+                
+                <div class="meal-card" style="display: flex; align-items: center; margin-bottom: 15px;">
+                    <div style="width: 40px; margin-right: 15px; display: flex; justify-content: center; color: #4CAF50; font-size: 24px;">👥</div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 500;">邀请好友</div>
+                    </div>
+                    <div style="color: #999;">></div>
+                </div>
+                
+                <button class="button" style="background-color: #f5f5f5; color: #666; margin-top: 20px;" onclick="switchScreen('login-screen')">退出登录</button>
+            </div>
+            
+            <div class="tab-bar">
+                <div class="tab active" onclick="switchScreen('home-screen')">
+                    <div class="icon">🏠</div>
+                    <div>首页</div>
+                </div>
+                <div class="tab" onclick="switchScreen('sleep-screen')">
+                    <div class="icon">😴</div>
+                    <div>睡眠</div>
+                </div>
+                <div class="tab" onclick="switchScreen('food-screen')">
+                    <div class="icon">🍽️</div>
+                    <div>饮食</div>
+                </div>
+                <div class="tab" onclick="switchScreen('ai-qa-screen')">
+                    <div class="icon">🤖</div>
+                    <div>AI顾问</div>
+                </div>
+                <div class="tab" onclick="switchScreen('profile-screen')">
+                    <div class="icon">👤</div>
+                    <div>我的</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 添加设置页面 -->
+        <div id="settings-screen" class="screen">
+            <div class="status-bar">
+                <div class="time">9:41</div>
+                <div class="icons">
+                    <span>📶</span>
+                    <span>🔋</span>
+                </div>
+            </div>
+            
+            <div class="content">
+                <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                    <div style="width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; margin-right: 15px;" onclick="switchScreen('profile-screen')">
+                        <span style="font-size: 24px;">←</span>
+                    </div>
+                    <h1 style="font-size: 24px; font-weight: bold;">设置</h1>
+                </div>
+                
+                <div class="section-title">账号设置</div>
+                
+                <div class="meal-card" style="display: flex; align-items: center; margin-bottom: 15px;">
+                    <div style="width: 40px; margin-right: 15px; display: flex; justify-content: center; color: #4CAF50; font-size: 24px;">👤</div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 500;">个人资料</div>
+                        <div style="font-size: 12px; color: #999; margin-top: 4px;">修改昵称、头像等基本信息</div>
+                    </div>
+                    <div style="color: #999;">></div>
+                </div>
+                
+                <div class="meal-card" style="display: flex; align-items: center; margin-bottom: 15px;">
+                    <div style="width: 40px; margin-right: 15px; display: flex; justify-content: center; color: #4CAF50; font-size: 24px;">📱</div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 500;">手机号码</div>
+                        <div style="font-size: 12px; color: #999; margin-top: 4px;">138****6789</div>
+                    </div>
+                    <div style="color: #999;">></div>
+                </div>
+                
+                <div class="meal-card" style="display: flex; align-items: center; margin-bottom: 15px;">
+                    <div style="width: 40px; margin-right: 15px; display: flex; justify-content: center; color: #4CAF50; font-size: 24px;">🔒</div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 500;">密码设置</div>
+                        <div style="font-size: 12px; color: #999; margin-top: 4px;">修改登录密码</div>
+                    </div>
+                    <div style="color: #999;">></div>
+                </div>
+                
+                <div class="section-title">健康数据</div>
+                
+                <div class="meal-card" style="display: flex; align-items: center; margin-bottom: 15px;" onclick="switchScreen('health-info-screen')">
+                    <div style="width: 40px; margin-right: 15px; display: flex; justify-content: center; color: #4CAF50; font-size: 24px;">📊</div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 500;">身体数据</div>
+                        <div style="font-size: 12px; color: #999; margin-top: 4px;">更新身高、体重等健康指标</div>
+                    </div>
+                    <div style="color: #999;">></div>
+                </div>
+                
+                <div class="meal-card" style="display: flex; align-items: center; margin-bottom: 15px;">
+                    <div style="width: 40px; margin-right: 15px; display: flex; justify-content: center; color: #4CAF50; font-size: 24px;">🎯</div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 500;">健康目标</div>
+                        <div style="font-size: 12px; color: #999; margin-top: 4px;">设置运动、饮食等健康目标</div>
+                    </div>
+                    <div style="color: #999;">></div>
+                </div>
+                
+                <div class="section-title">关于</div>
+                
+                <div class="meal-card" style="display: flex; align-items: center; margin-bottom: 15px;">
+                    <div style="width: 40px; margin-right: 15px; display: flex; justify-content: center; color: #4CAF50; font-size: 24px;">📱</div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 500;">版本信息</div>
+                        <div style="font-size: 12px; color: #999; margin-top: 4px;">V1.0.0</div>
+                    </div>
+                </div>
+                
+                <div class="meal-card" style="display: flex; align-items: center; margin-bottom: 15px;">
+                    <div style="width: 40px; margin-right: 15px; display: flex; justify-content: center; color: #4CAF50; font-size: 24px;">📄</div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 500;">用户协议</div>
+                    </div>
+                    <div style="color: #999;">></div>
+                </div>
+                
+                <div class="meal-card" style="display: flex; align-items: center; margin-bottom: 15px;">
+                    <div style="width: 40px; margin-right: 15px; display: flex; justify-content: center; color: #4CAF50; font-size: 24px;">🔒</div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 500;">隐私政策</div>
+                    </div>
+                    <div style="color: #999;">></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 添加健康信息设置页面 -->
+        <div id="health-info-screen" class="screen">
+            <div class="status-bar">
+                <div class="time">9:41</div>
+                <div class="icons">
+                    <span>📶</span>
+                    <span>🔋</span>
+                </div>
+            </div>
+            
+            <div class="content">
+                <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                    <div style="width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; margin-right: 15px;" onclick="switchScreen('settings-screen')">
+                        <span style="font-size: 24px;">←</span>
+                    </div>
+                    <h1 style="font-size: 24px; font-weight: bold;">身体数据</h1>
+                </div>
+                
+                <div class="input-field">
+                    <label>性别</label>
+                    <div style="display: flex; gap: 10px;">
+                        <button style="flex: 1; padding: 12px; border: 1px solid #4CAF50; background-color: white; border-radius: 8px; color: #4CAF50;">男</button>
+                        <button style="flex: 1; padding: 12px; border: 1px solid #ddd; background-color: white; border-radius: 8px;">女</button>
+                    </div>
+                </div>
+                
+                <div class="input-field">
+                    <label>出生日期</label>
+                    <input type="date" value="1990-01-01">
+                </div>
+                
+                <div class="input-field">
+                    <label>身高 (cm)</label>
+                    <input type="number" value="175" placeholder="请输入身高">
+                </div>
+                
+                <div class="input-field">
+                    <label>体重 (kg)</label>
+                    <input type="number" value="68" placeholder="请输入体重">
+                </div>
+                
+                <div class="input-field">
+                    <label>血型</label>
+                    <select>
+                        <option>A型</option>
+                        <option selected>B型</option>
+                        <option>O型</option>
+                        <option>AB型</option>
+                        <option>其他</option>
+                    </select>
+                </div>
+                
+                <div class="input-field">
+                    <label>基础代谢率 (kcal/天)</label>
+                    <input type="number" value="1680" disabled style="background-color: #f5f5f5;">
+                    <div style="font-size: 12px; color: #999; margin-top: 5px;">基础代谢率会根据您的身高、体重、年龄和性别自动计算</div>
+                </div>
+                
+                <div class="input-field">
+                    <label>健康目标</label>
+                    <select>
+                        <option>保持健康</option>
+                        <option selected>减肥塑形</option>
+                        <option>增肌</option>
+                        <option>改善睡眠</option>
+                        <option>控制慢性病</option>
+                    </select>
+                </div>
+                
+                <button class="button" onclick="saveHealthInfo()">保存</button>
+            </div>
+        </div>
+
+        <!-- 将社区页面改为AI问答页面 -->
+        <div id="ai-qa-screen" class="screen">
+            <div class="status-bar">
+                <div class="time">9:41</div>
+                <div class="icons">
+                    <span>📶</span>
+                    <span>🔋</span>
+                </div>
+            </div>
+            
+            <div class="content">
+                <div class="header">
+                    <h1>AI健康顾问</h1>
+                </div>
+                
+                <div class="ai-header" style="margin-bottom: 20px;">
+                    <div class="ai-avatar">🤖</div>
+                    <div class="ai-info">
+                        <h2>健康AI助手</h2>
+                        <p>随时为您解答健康问题</p>
+                    </div>
+                </div>
+                
+                <div class="section-title">常见问题</div>
+                <div class="activity-list" style="margin-bottom: 25px;">
+                    <div class="activity-item" onclick="askQuestion('如何改善睡眠质量?')">
+                        <div class="icon">😴</div>
+                        <div class="name">睡眠改善</div>
+                    </div>
+                    <div class="activity-item" onclick="askQuestion('推荐一些健康的减肥食谱')">
+                        <div class="icon">🥗</div>
+                        <div class="name">减肥饮食</div>
+                    </div>
+                    <div class="activity-item" onclick="askQuestion('如何缓解工作压力?')">
+                        <div class="icon">🧘</div>
+                        <div class="name">压力管理</div>
+                    </div>
+                    <div class="activity-item" onclick="askQuestion('有氧运动和力量训练怎么搭配?')">
+                        <div class="icon">🏃</div>
+                        <div class="name">科学健身</div>
+                    </div>
+                </div>
+                
+                <div class="chat-container" style="background-color: #f8f8f8; border-radius: 12px; padding: 15px; height: 350px; overflow-y: auto;">
+                    <div class="message ai-message">
+                        你好！我是你的健康AI顾问，有任何健康问题都可以问我。
+                    </div>
+                    
+                    <div id="chat-messages">
+                        <!-- 消息内容将动态添加到这里 -->
+                    </div>
+                </div>
+                
+                <div style="display: flex; margin-top: 15px; gap: 10px;">
+                    <input id="question-input" type="text" placeholder="输入你的健康问题..." style="flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 25px; font-size: 16px; outline: none;">
+                    <button onclick="sendQuestion()" style="width: 50px; height: 50px; background-color: #4CAF50; border: none; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 20px;">➤</button>
+                </div>
+            </div>
+            
+            <div class="tab-bar">
+                <div class="tab" onclick="switchScreen('home-screen')">
+                    <div class="icon">🏠</div>
+                    <div>首页</div>
+                </div>
+                <div class="tab" onclick="switchScreen('sleep-screen')">
+                    <div class="icon">😴</div>
+                    <div>睡眠</div>
+                </div>
+                <div class="tab" onclick="switchScreen('food-screen')">
+                    <div class="icon">🍽️</div>
+                    <div>饮食</div>
+                </div>
+                <div class="tab active" onclick="switchScreen('ai-qa-screen')">
+                    <div class="icon">🤖</div>
+                    <div>AI顾问</div>
+                </div>
+                <div class="tab" onclick="switchScreen('profile-screen')">
+                    <div class="icon">👤</div>
+                    <div>我的</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentScreen = 'login-screen';
+        // 分开的两个屏幕数组，登录流程和主应用流程
+        const loginScreens = ['login-screen', 'register-screen', 'user-info-screen'];
+        const appScreens = ['home-screen', 'sleep-screen', 'food-screen', 'ai-qa-screen', 'profile-screen', 'workout-screen', 'analysis-screen', 'settings-screen', 'health-info-screen'];
+        let currentAppScreens = loginScreens; // 默认显示登录流程屏幕
+        
+        function switchScreen(screenId) {
+            // 隐藏当前屏幕
+            document.getElementById(currentScreen).classList.remove('active');
+            
+            // 显示新屏幕
+            document.getElementById(screenId).classList.add('active');
+            currentScreen = screenId;
+            
+            // 如果切换到了应用主界面，更新当前屏幕组
+            if (appScreens.includes(screenId) && currentAppScreens === loginScreens) {
+                currentAppScreens = appScreens;
+                // 显示导航按钮
+                document.querySelector('.navigation').style.display = 'flex';
+            }
+            
+            // 如果在登录流程中，隐藏导航按钮
+            if (loginScreens.includes(screenId)) {
+                document.querySelector('.navigation').style.display = 'none';
+            }
+            
+            updateScreenIndicator();
+        }
+        
+        function nextScreen() {
+            const currentIndex = currentAppScreens.indexOf(currentScreen);
+            if (currentIndex !== -1) {
+                const nextIndex = (currentIndex + 1) % currentAppScreens.length;
+                switchScreen(currentAppScreens[nextIndex]);
+            }
+        }
+        
+        function prevScreen() {
+            const currentIndex = currentAppScreens.indexOf(currentScreen);
+            if (currentIndex !== -1) {
+                const prevIndex = (currentIndex - 1 + currentAppScreens.length) % currentAppScreens.length;
+                switchScreen(currentAppScreens[prevIndex]);
+            }
+        }
+        
+        function updateScreenIndicator() {
+            if (appScreens.includes(currentScreen)) {
+                const currentIndex = appScreens.indexOf(currentScreen) + 1;
+                document.getElementById('screen-indicator').textContent = `${currentIndex}/${appScreens.length}`;
+            }
+        }
+        
+        // 确保DOM加载完成后执行初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化时设置正确的活动屏幕
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById('login-screen').classList.add('active');
+            
+            // 初始时隐藏导航按钮
+            document.querySelector('.navigation').style.display = 'none';
+            
+            // 更新指示器
+            updateScreenIndicator();
+        });
+        
+        function saveHealthInfo() {
+            // 显示保存成功提示
+            alert('身体数据已保存成功！');
+            // 返回设置页面
+            switchScreen('settings-screen');
+        }
+        
+        // AI问答功能
+        function askQuestion(question) {
+            if (!question) return;
+            
+            // 添加用户问题到聊天区域
+            const userMessage = document.createElement('div');
+            userMessage.className = 'message user-message';
+            userMessage.textContent = question;
+            document.getElementById('chat-messages').appendChild(userMessage);
+            
+            // 显示"正在输入"状态
+            const loadingMessage = document.createElement('div');
+            loadingMessage.className = 'message ai-message loading';
+            loadingMessage.textContent = '正在思考';
+            document.getElementById('chat-messages').appendChild(loadingMessage);
+            
+            // 滚动到底部
+            const chatContainer = document.querySelector('.chat-container');
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            
+            // 模拟AI回复延迟
+            setTimeout(() => {
+                // 移除加载状态
+                document.getElementById('chat-messages').removeChild(loadingMessage);
+                
+                // 生成AI回复
+                const aiMessage = document.createElement('div');
+                aiMessage.className = 'message ai-message';
+                
+                // 根据问题提供对应回答
+                if (question.includes('睡眠')) {
+                    aiMessage.innerHTML = `
+                        根据健康数据分析，改善睡眠质量的建议：<br><br>
+                        1. 保持规律的睡眠时间表<br>
+                        2. 睡前1小时避免使用电子设备<br>
+                        3. 创建舒适的睡眠环境，温度保持在18-20°C<br>
+                        4. 睡前可以做轻度伸展或冥想<br>
+                        5. 避免睡前摄入咖啡因和酒精<br><br>
+                        您最近的睡眠数据显示深度睡眠比例偏低，建议特别注意第2、4点。
+                    `;
+                } else if (question.includes('减肥') || question.includes('食谱')) {
+                    aiMessage.innerHTML = `
+                        适合您健康减肥的食谱建议：<br><br>
+                        1. 早餐：燕麦粥配蓝莓和坚果<br>
+                        2. 午餐：烤鸡胸肉配藜麦沙拉<br>
+                        3. 晚餐：清蒸鱼配绿叶蔬菜<br>
+                        4. 加餐：低脂希腊酸奶或苹果<br><br>
+                        基于您的代谢率和活动水平，建议每日摄入1600-1800卡路里，保持蛋白质占比25%左右。
+                    `;
+                } else if (question.includes('压力')) {
+                    aiMessage.innerHTML = `
+                        缓解工作压力的有效方法：<br><br>
+                        1. 每天进行15-20分钟的冥想练习<br>
+                        2. 运用4-7-8呼吸法（吸气4秒，屏息7秒，呼气8秒）<br>
+                        3. 适当的有氧运动可以减轻压力激素<br>
+                        4. 保持充足的睡眠和均衡的饮食<br>
+                        5. 尝试记录感恩日记<br><br>
+                        App内有专门的冥想引导课程，建议您尝试"工作减压"系列。
+                    `;
+                } else if (question.includes('有氧') || question.includes('力量') || question.includes('健身')) {
+                    aiMessage.innerHTML = `
+                        科学的训练搭配建议：<br><br>
+                        1. 一周进行3-4次力量训练，2-3次有氧训练<br>
+                        2. 力量训练和有氧训练最好间隔进行<br>
+                        3. 有氧训练建议：中等强度30-45分钟或高强度间歇15-20分钟<br>
+                        4. 力量训练注意大肌群和小肌群交替，避免连续训练同一肌群<br><br>
+                        根据您的健康目标和身体状况，我可以为您定制更详细的训练计划。
+                    `;
+                } else {
+                    aiMessage.innerHTML = `
+                        感谢您的提问！<br><br>
+                        作为您的健康AI顾问，我可以提供关于睡眠、饮食、运动、压力管理等多方面的健康建议。<br><br>
+                        您的问题我已记录，会基于您的健康数据提供更精准的回答。您还有其他健康方面的疑问吗？
+                    `;
+                }
+                
+                document.getElementById('chat-messages').appendChild(aiMessage);
+                
+                // 滚动到底部
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }, 1500);
+        }
+        
+        function sendQuestion() {
+            const input = document.getElementById('question-input');
+            const question = input.value.trim();
+            
+            if (question) {
+                askQuestion(question);
+                input.value = '';
+            }
+        }
+        
+        // 在输入框中按Enter键发送问题
+        document.addEventListener('DOMContentLoaded', function() {
+            const input = document.getElementById('question-input');
+            if (input) {
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        sendQuestion();
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html> 
